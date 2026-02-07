@@ -641,14 +641,25 @@
             const folderList = document.getElementById('folderList');
             const linkFolderSelect = document.getElementById('linkFolder');
             
-            // Update sidebar folders
-            const allItem = folderList.querySelector('[data-folder="all"]');
+            // Clear and rebuild folders
             folderList.innerHTML = '';
+            
+            // Add "All Links" with click handler
+            const allItem = document.createElement('li');
+            allItem.className = 'folder-item active';
+            allItem.dataset.folder = 'all';
+            allItem.innerHTML = `
+                <span>All Links</span>
+                <span class="folder-count" id="allCount">${links.length}</span>
+            `;
+            allItem.addEventListener('click', () => {
+                currentFolder = 'all';
+                updateActiveFolder();
+                renderLinks();
+            });
             folderList.appendChild(allItem);
             
-            const allCount = document.getElementById('allCount');
-            allCount.textContent = links.length;
-            
+            // Add other folders
             folders.forEach(folder => {
                 const count = links.filter(l => l.folder === folder).length;
                 const li = document.createElement('li');
